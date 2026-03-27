@@ -1,0 +1,20 @@
+{
+  "name": "ws",
+  "version": "1.0.0",
+  "description": "websocket app",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "Arnav",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "multer": "^2.1.1",
+    "nodemon": "^3.1.14"
+  }
+}
