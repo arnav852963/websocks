@@ -24,8 +24,8 @@ app.use((err, req, res, _next) => {
 
 
 
-
-
+import matchRoutes from "./routes/match.routes.js";
+app.use("/api/v1/match", matchRoutes);
 
 export default app;
 
