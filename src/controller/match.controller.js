@@ -12,7 +12,10 @@ const  createMatch = asyncHandler(async (req, res) => {
     if (!zodParsed.success) {
         throw new ApiError("Invalid request body " + JSON.stringify(zodParsed.error) , 400);
     }
-    const {data : {startTime , endTime ,homeScore , awayScore }} = zodParsed;
+    const {data } = zodParsed;
+    if(!data) throw new ApiError("data in zod is miissing" , 400);
+    const {startTime , endTime ,homeScore , awayScore }= data;
+    if(!startTime || !endTime || !homeScore  || !awayScore) throw new ApiError("startTime and endTime are required" , 400);
 
     const [event] = await db.insert(matches).values({
         ...zodParsed.data,
