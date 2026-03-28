@@ -24,9 +24,11 @@ app.use((err, req, res, _next) => {
   res.status(status).json({ error: message });
 });
 
+app.use(securityMiddleware())
 
 
 import matchRoutes from "./routes/match.routes.js";
+import {securityMiddleware} from "./arcjet.js";
 
 app.use("/api/v1/match", matchRoutes);
 

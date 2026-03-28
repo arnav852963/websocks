@@ -41,7 +41,7 @@ const getMatches = asyncHandler(async (req, res) => {
 
         const allMatches = await db.select().from(matches).orderBy((desc(matches.createdAt))).limit(100);
         if(!allMatches ) throw new ApiError("Failed to fetch matches" , 500);
-        if(allMatches.length === 0) throw new ApiError("No matches found" , 404);
+        if(allMatches.length === 0) throw new ApiError("No matches found" , 400);
 
         res.status(200).json(new ApiResponse(200 , allMatches , "matches fetched successfully"));
 })
