@@ -15,7 +15,7 @@ const  createMatch = asyncHandler(async (req, res) => {
     const {data } = zodParsed;
     if(!data) throw new ApiError("data in zod is miissing" , 400);
     const {startTime , endTime ,homeScore , awayScore }= data;
-    if(!startTime || !endTime || !homeScore  || !awayScore) throw new ApiError("startTime and endTime are required" , 400);
+    // if(!startTime || !endTime || !homeScore  || !awayScore) throw new ApiError("startTime and endTime are required" , 400);
 
     const [event] = await db.insert(matches).values({
         ...zodParsed.data,
@@ -27,6 +27,10 @@ const  createMatch = asyncHandler(async (req, res) => {
     }).returning();
 
     if(!event) throw new ApiError("Failed to create match" , 500);
+    if(res.app.locals.broadcastMatchesCreated) {
+        console.log("i am here")
+        res.app.locals.broadcastMatchesCreated(event)
+    }
 
     res.status(201).json(new ApiResponse(201 , event , "match created successfully"));
 
