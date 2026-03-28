@@ -18,6 +18,13 @@ export function attachWebsocketServer(server){
     const wss = new WebSocketServer({ server , path: '/ws' , maxPayload: 1024 * 1024  })
 
     wss.on('connection' , (socket) => {
+        socket.isAlive =true
+
+        socket.on("pong" , () => {
+            socket.isAlive = true
+        })
+
+
         sendJson(socket , {type: "welcome"})
 
         socket.on('error' , (err) => {
@@ -25,6 +32,18 @@ export function attachWebsocketServer(server){
             throw new ApiError("Websocket error: " + err.message , 500)
         })
     })
+
+    const  interval = setInterval(() => {
+        wss.clients.forEach((socket) => {
+            if(socket.isAlive === false) return socket.terminate()
+
+            socket.isAlive = false
+            socket.ping()
+        })
+
+    }, 30000)
+
+    wss.on("close" , () => { clearInterval(interval) })
 
     function broadcastMatchesCreated(match){
         console.log("yaha bhi aaya")
