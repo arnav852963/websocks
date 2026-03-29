@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import http from "http";
 import {attachWebsocketServer} from "./ws/server.js";
+import {securityMiddleware} from "./arcjet.js";
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -24,16 +25,22 @@ app.use((err, req, res, _next) => {
   res.status(status).json({ error: message });
 });
 
-app.use(securityMiddleware())
+// app.use(securityMiddleware())
 
 
 import matchRoutes from "./routes/match.routes.js";
-import {securityMiddleware} from "./arcjet.js";
+
+
 
 app.use("/api/v1/match", matchRoutes);
+import commentaryRoutes from "./routes/commentaryy.routes.js";
 
-const {broadcastMatchesCreated} = attachWebsocketServer(httpServer)
+app.use("/api/v1/commentary", commentaryRoutes);
+
+
+const {broadcastMatchesCreated , broadcastCommentary} = attachWebsocketServer(httpServer)
 app.locals.broadcastMatchesCreated = broadcastMatchesCreated
+app.locals.broadcastCommentary = broadcastCommentary
 
 export default httpServer;
 
